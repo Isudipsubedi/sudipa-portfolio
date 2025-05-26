@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { Phone, Mail, Linkedin, Globe, Download, TrendingUp, Users, Award, BookOpen, Target, CheckCircle, Calendar, ArrowRight, Star, Quote, ChevronDown, Menu, X, ExternalLink, MapPin, GraduationCap, Briefcase } from 'lucide-react';
 import SmoothScroll from '@/components/SmoothScroll';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const Index = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -121,7 +121,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+    <div className="min-h-screen bg-black dark:bg-gray-900 text-white relative overflow-hidden transition-colors duration-300">
       <SmoothScroll />
       
       {/* Cursor Follower */}
@@ -136,17 +136,19 @@ const Index = () => {
         <div className="w-4 h-4 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full opacity-50 blur-sm"></div>
       </div>
 
-      {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-40 transition-all duration-500 ${isLoaded ? 'translate-y-0' : '-translate-y-full'} ${activeSection !== 'home' ? 'bg-black/80 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'}`}>
+      {/* Navigation - Fixed alignment issues */}
+      <nav className={`fixed top-0 w-full z-40 transition-all duration-500 ${isLoaded ? 'translate-y-0' : '-translate-y-full'} ${activeSection !== 'home' ? 'bg-black/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex justify-between items-center py-6">
-            <div className="text-2xl font-bold">
+          <div className="flex justify-between items-center py-4 lg:py-6">
+            {/* Logo */}
+            <div className="text-xl lg:text-2xl font-bold flex-shrink-0">
               <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                 SUDIPA SUBEDI
               </span>
             </div>
             
-            <div className="hidden md:flex space-x-8">
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
               {['Home', 'About', 'Experience', 'Skills', 'Education', 'Achievements', 'Blog', 'Contact'].map((item) => (
                 <a 
                   key={item}
@@ -161,16 +163,23 @@ const Index = () => {
               ))}
             </div>
 
-            <button 
-              className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            {/* Right side controls */}
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              
+              {/* Mobile menu button */}
+              <button 
+                className="lg:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
 
+          {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="md:hidden bg-black/95 backdrop-blur-xl rounded-2xl mt-4 py-6 px-8 border border-white/10">
+            <div className="lg:hidden bg-black/95 dark:bg-gray-900/95 backdrop-blur-xl rounded-2xl mt-4 py-6 px-8 border border-white/10 mb-4">
               {['Home', 'About', 'Experience', 'Skills', 'Education', 'Achievements', 'Blog', 'Contact'].map((item) => (
                 <a 
                   key={item}
@@ -205,14 +214,14 @@ const Index = () => {
                 <span className="text-sm font-medium text-blue-300">Available for Opportunities</span>
               </div>
               
-              <h1 className="text-7xl lg:text-8xl font-black mb-8 leading-none">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black mb-8 leading-none">
                 <span className="block text-white">SUDIPA</span>
                 <span className="block bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient">
                   SUBEDI
                 </span>
               </h1>
               
-              <div className="text-2xl font-light mb-6 text-white/80">
+              <div className="text-lg sm:text-xl lg:text-2xl font-light mb-6 text-white/80">
                 <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent font-semibold">BBA Graduate</span>
                 <span className="mx-2">•</span>
                 <span>Finance Specialist</span>
@@ -220,35 +229,35 @@ const Index = () => {
                 <span>Strategic Leader</span>
               </div>
               
-              <p className="text-xl text-white/70 mb-10 leading-relaxed max-w-2xl">
+              <p className="text-lg lg:text-xl text-white/70 mb-10 leading-relaxed max-w-2xl">
                 Transforming financial challenges into strategic opportunities through 
                 <span className="text-blue-400 font-semibold"> data-driven insights</span> and 
                 <span className="text-purple-400 font-semibold"> innovative management solutions</span>.
               </p>
               
-              <div className="flex flex-wrap gap-6 mb-12">
-                <button className="group bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-4 rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 flex items-center gap-3 shadow-2xl hover:shadow-blue-500/25 transform hover:scale-105">
+              <div className="flex flex-col sm:flex-row gap-6 mb-12">
+                <button className="group bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-4 rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 flex items-center justify-center gap-3 shadow-2xl hover:shadow-blue-500/25 transform hover:scale-105">
                   <Download size={20} />
                   <span className="font-semibold">Download Resume</span>
                   <ArrowRight className="group-hover:translate-x-1 transition-transform" size={16} />
                 </button>
-                <a href="#contact" className="border-2 border-white/20 hover:border-blue-400 px-8 py-4 rounded-2xl hover:bg-white/5 transition-all duration-300 font-semibold backdrop-blur-sm">
+                <a href="#contact" className="border-2 border-white/20 hover:border-blue-400 px-8 py-4 rounded-2xl hover:bg-white/5 transition-all duration-300 font-semibold backdrop-blur-sm text-center">
                   Let's Connect
                 </a>
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-8">
+              <div className="grid grid-cols-3 gap-4 lg:gap-8">
                 {[
                   { number: "4+", label: "Years Experience" },
                   { number: "15+", label: "Projects Completed" },
                   { number: "5+", label: "Certifications" }
                 ].map((stat, index) => (
                   <div key={stat.label} className="text-center">
-                    <div className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
+                    <div className="text-2xl lg:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
                       {stat.number}
                     </div>
-                    <div className="text-sm text-white/60 font-medium">{stat.label}</div>
+                    <div className="text-xs lg:text-sm text-white/60 font-medium">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -256,9 +265,9 @@ const Index = () => {
             
             <div className={`flex justify-center transform transition-all duration-1000 delay-500 ${isLoaded ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
               <div className="relative">
-                <div className="w-96 h-96 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 rounded-full relative overflow-hidden">
-                  <div className="absolute inset-4 bg-black rounded-full flex items-center justify-center">
-                    <div className="text-8xl font-black text-white">SS</div>
+                <div className="w-72 h-72 lg:w-96 lg:h-96 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 rounded-full relative overflow-hidden">
+                  <div className="absolute inset-4 bg-black dark:bg-gray-900 rounded-full flex items-center justify-center">
+                    <div className="text-6xl lg:text-8xl font-black text-white">SS</div>
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-white/10 rounded-full"></div>
                 </div>

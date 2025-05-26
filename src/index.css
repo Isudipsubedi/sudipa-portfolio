@@ -75,6 +75,38 @@
   }
 }
 
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Dark mode transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Custom scrollbar for dark mode */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #2563eb, #7c3aed);
+}
+
 /* Custom Animations */
 @keyframes blob {
   0% {
@@ -138,29 +170,6 @@
   50% {
     border-color: #3b82f6;
   }
-}
-
-/* Smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #2563eb, #7c3aed);
 }
 
 /* Interactive hover effects */
@@ -312,10 +321,32 @@ html {
   }
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .bg-auto-dark {
-    background-color: #1f2937;
-    color: #f9fafb;
+/* Theme transition improvements */
+@supports (color-scheme: dark) {
+  :root {
+    color-scheme: light dark;
   }
+}
+
+/* Enhanced backdrop filters */
+.backdrop-blur-enhanced {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+
+/* Dark mode specific adjustments */
+.dark .bg-black {
+  background-color: rgb(17 24 39);
+}
+
+.dark .bg-black\/50 {
+  background-color: rgb(17 24 39 / 0.5);
+}
+
+.dark .bg-black\/80 {
+  background-color: rgb(17 24 39 / 0.8);
+}
+
+.dark .bg-black\/95 {
+  background-color: rgb(17 24 39 / 0.95);
 }
