@@ -1,18 +1,23 @@
 
 import React, { useState, useEffect } from 'react';
-import { Phone, Mail, Linkedin, Globe, Download, TrendingUp, Users, Award, BookOpen, Target, CheckCircle, Calendar, ArrowRight, Star, Quote, ChevronDown, Menu, X } from 'lucide-react';
+import { Phone, Mail, Linkedin, Globe, Download, TrendingUp, Users, Award, BookOpen, Target, CheckCircle, Calendar, ArrowRight, Star, Quote, ChevronDown, Menu, X, ExternalLink, MapPin, GraduationCap, Briefcase } from 'lucide-react';
 import SmoothScroll from '@/components/SmoothScroll';
 
 const Index = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isLoaded, setIsLoaded] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setIsLoaded(true);
     
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+
     const handleScroll = () => {
-      const sections = ['home', 'about', 'experience', 'skills', 'blog', 'contact'];
+      const sections = ['home', 'about', 'experience', 'skills', 'education', 'achievements', 'blog', 'testimonials', 'contact'];
       const current = sections.find(section => {
         const element = document.getElementById(section);
         if (element) {
@@ -25,7 +30,12 @@ const Index = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
   const blogPosts = [
@@ -60,69 +70,112 @@ const Index = () => {
       name: "Ram Prasad Sharma",
       position: "Senior Manager, B.B.R Construction",
       content: "Sudipa's analytical skills and attention to detail in financial record-keeping have been exceptional. Her ability to manage complex construction project finances is remarkable.",
-      rating: 5
+      rating: 5,
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
     },
     {
       name: "Priya Adhikari",
       position: "Director, CBM Nepal",
       content: "A dedicated professional with strong business acumen. Sudipa consistently delivered high-quality work and showed great initiative in market research projects.",
-      rating: 5
+      rating: 5,
+      avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face"
     },
     {
       name: "Bikash Thapa",
       position: "President, Geetanagar Junior Jaycees",
       content: "Sudipa's leadership as Executive Vice President was transformative. Her organizational skills and vision helped us achieve our community goals effectively.",
-      rating: 5
+      rating: 5,
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face"
+    }
+  ];
+
+  const achievements = [
+    {
+      icon: Award,
+      title: "Hult Prize Runner-up",
+      description: "Oxford College of Engineering and Management - OnCampus Event",
+      year: "2024",
+      color: "from-yellow-400 to-orange-500"
+    },
+    {
+      icon: Users,
+      title: "Executive Vice President",
+      description: "Geetanagar Junior Jaycees - Leading community initiatives",
+      year: "2024",
+      color: "from-blue-500 to-purple-600"
+    },
+    {
+      icon: BookOpen,
+      title: "College Ambassador",
+      description: "Idea Studio Nepal - Kathmandu University",
+      year: "2023",
+      color: "from-green-400 to-blue-500"
+    },
+    {
+      icon: Target,
+      title: "Quiz Competition Runner-up",
+      description: "OCEM Sports Tournament - Academic Excellence",
+      year: "2023",
+      color: "from-pink-400 to-red-500"
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <SmoothScroll />
       
-      {/* Enhanced Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isLoaded ? 'translate-y-0' : '-translate-y-full'} ${activeSection !== 'home' ? 'bg-white/90 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              SUDIPA SUBEDI
+      {/* Cursor Follower */}
+      <div 
+        className="fixed pointer-events-none z-50 transition-all duration-300 ease-out"
+        style={{
+          left: mousePosition.x - 8,
+          top: mousePosition.y - 8,
+          transform: `translate(-50%, -50%)`
+        }}
+      >
+        <div className="w-4 h-4 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full opacity-50 blur-sm"></div>
+      </div>
+
+      {/* Navigation */}
+      <nav className={`fixed top-0 w-full z-40 transition-all duration-500 ${isLoaded ? 'translate-y-0' : '-translate-y-full'} ${activeSection !== 'home' ? 'bg-black/80 backdrop-blur-xl border-b border-white/10' : 'bg-transparent'}`}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="flex justify-between items-center py-6">
+            <div className="text-2xl font-bold">
+              <span className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                SUDIPA SUBEDI
+              </span>
             </div>
             
-            {/* Desktop Menu */}
             <div className="hidden md:flex space-x-8">
-              {['Home', 'About', 'Experience', 'Skills', 'Blog', 'Contact'].map((item) => (
+              {['Home', 'About', 'Experience', 'Skills', 'Education', 'Achievements', 'Blog', 'Contact'].map((item) => (
                 <a 
                   key={item}
                   href={`#${item.toLowerCase()}`} 
-                  className={`relative text-sm font-medium transition-all duration-300 hover:text-blue-600 ${
-                    activeSection === item.toLowerCase() ? 'text-blue-600' : 'text-slate-700'
+                  className={`relative text-sm font-medium transition-all duration-300 hover:text-blue-400 group ${
+                    activeSection === item.toLowerCase() ? 'text-blue-400' : 'text-white/80'
                   }`}
                 >
                   {item}
-                  {activeSection === item.toLowerCase() && (
-                    <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full animate-pulse"></div>
-                  )}
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-500 transition-all duration-300 group-hover:w-full"></span>
                 </a>
               ))}
             </div>
 
-            {/* Mobile Menu Button */}
             <button 
-              className="md:hidden p-2 rounded-lg hover:bg-white/20 transition-colors"
+              className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
 
-          {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="md:hidden bg-white/95 backdrop-blur-md rounded-lg mt-2 py-4 px-6 shadow-xl">
-              {['Home', 'About', 'Experience', 'Skills', 'Blog', 'Contact'].map((item) => (
+            <div className="md:hidden bg-black/95 backdrop-blur-xl rounded-2xl mt-4 py-6 px-8 border border-white/10">
+              {['Home', 'About', 'Experience', 'Skills', 'Education', 'Achievements', 'Blog', 'Contact'].map((item) => (
                 <a 
                   key={item}
                   href={`#${item.toLowerCase()}`} 
-                  className="block py-2 text-slate-700 hover:text-blue-600 transition-colors"
+                  className="block py-3 text-white/80 hover:text-blue-400 transition-colors border-b border-white/10 last:border-b-0"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item}
@@ -133,209 +186,201 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Dynamic Hero Section */}
-      <section id="home" className="pt-20 pb-16 min-h-screen flex items-center relative overflow-hidden">
+      {/* Hero Section */}
+      <section id="home" className="min-h-screen flex items-center relative">
+        {/* Background Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+        
         {/* Animated Background Elements */}
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-          <div className="absolute top-40 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-          <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-1/4 w-96 h-96 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-1/4 w-96 h-96 bg-gradient-to-r from-pink-500/20 to-orange-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className={`transform transition-all duration-1000 ${isLoaded ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}>
-              <div className="inline-block mb-4">
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full text-sm font-medium animate-pulse">
-                  ✨ Available for Opportunities
-                </span>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className={`transform transition-all duration-1000 delay-300 ${isLoaded ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}`}>
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-full px-6 py-3 mb-8">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-blue-300">Available for Opportunities</span>
               </div>
               
-              <h1 className="text-6xl lg:text-7xl font-bold mb-6">
-                <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-                  SUDIPA
-                </span>
-                <br />
-                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient">
+              <h1 className="text-7xl lg:text-8xl font-black mb-8 leading-none">
+                <span className="block text-white">SUDIPA</span>
+                <span className="block bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient">
                   SUBEDI
                 </span>
               </h1>
               
-              <div className="text-xl text-slate-600 mb-4 font-medium">
-                <span className="typing-effect">BBA Graduate • Finance Specialist • Strategic Leader</span>
+              <div className="text-2xl font-light mb-6 text-white/80">
+                <span className="bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent font-semibold">BBA Graduate</span>
+                <span className="mx-2">•</span>
+                <span>Finance Specialist</span>
+                <span className="mx-2">•</span>
+                <span>Strategic Leader</span>
               </div>
               
-              <p className="text-lg text-slate-700 mb-8 leading-relaxed max-w-xl">
+              <p className="text-xl text-white/70 mb-10 leading-relaxed max-w-2xl">
                 Transforming financial challenges into strategic opportunities through 
-                <span className="text-blue-600 font-semibold"> data-driven insights</span> and 
-                <span className="text-purple-600 font-semibold"> innovative management solutions</span>. 
-                Ready to drive growth in dynamic banking and finance environments.
+                <span className="text-blue-400 font-semibold"> data-driven insights</span> and 
+                <span className="text-purple-400 font-semibold"> innovative management solutions</span>.
               </p>
               
-              <div className="flex flex-wrap gap-4 mb-8">
-                <button className="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105">
+              <div className="flex flex-wrap gap-6 mb-12">
+                <button className="group bg-gradient-to-r from-blue-500 to-purple-600 px-8 py-4 rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 flex items-center gap-3 shadow-2xl hover:shadow-blue-500/25 transform hover:scale-105">
                   <Download size={20} />
-                  <span>Download CV</span>
+                  <span className="font-semibold">Download Resume</span>
                   <ArrowRight className="group-hover:translate-x-1 transition-transform" size={16} />
                 </button>
-                <a href="#contact" className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-xl hover:bg-blue-600 hover:text-white transition-all duration-300 font-medium">
+                <a href="#contact" className="border-2 border-white/20 hover:border-blue-400 px-8 py-4 rounded-2xl hover:bg-white/5 transition-all duration-300 font-semibold backdrop-blur-sm">
                   Let's Connect
                 </a>
               </div>
 
-              {/* Quick Stats */}
-              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-slate-200">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-1">4+</div>
-                  <div className="text-sm text-slate-600">Years Experience</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600 mb-1">15+</div>
-                  <div className="text-sm text-slate-600">Projects Completed</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-pink-600 mb-1">5+</div>
-                  <div className="text-sm text-slate-600">Certifications</div>
-                </div>
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-8">
+                {[
+                  { number: "4+", label: "Years Experience" },
+                  { number: "15+", label: "Projects Completed" },
+                  { number: "5+", label: "Certifications" }
+                ].map((stat, index) => (
+                  <div key={stat.label} className="text-center">
+                    <div className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-2">
+                      {stat.number}
+                    </div>
+                    <div className="text-sm text-white/60 font-medium">{stat.label}</div>
+                  </div>
+                ))}
               </div>
             </div>
             
-            <div className={`flex justify-center transform transition-all duration-1000 delay-300 ${isLoaded ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
+            <div className={`flex justify-center transform transition-all duration-1000 delay-500 ${isLoaded ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
               <div className="relative">
-                <div className="w-96 h-96 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-2xl animate-pulse">
-                  <div className="w-80 h-80 bg-gradient-to-br from-slate-800 to-slate-600 rounded-full flex items-center justify-center text-white text-9xl font-bold shadow-inner">
-                    SS
+                <div className="w-96 h-96 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 rounded-full relative overflow-hidden">
+                  <div className="absolute inset-4 bg-black rounded-full flex items-center justify-center">
+                    <div className="text-8xl font-black text-white">SS</div>
                   </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-white/10 rounded-full"></div>
                 </div>
-                {/* Floating Icons */}
-                <div className="absolute -top-4 -right-4 bg-white p-3 rounded-full shadow-lg animate-bounce">
-                  <TrendingUp className="w-6 h-6 text-blue-600" />
-                </div>
-                <div className="absolute -bottom-4 -left-4 bg-white p-3 rounded-full shadow-lg animate-bounce delay-1000">
-                  <Award className="w-6 h-6 text-purple-600" />
-                </div>
-                <div className="absolute top-1/2 -left-8 bg-white p-3 rounded-full shadow-lg animate-bounce delay-500">
-                  <Users className="w-6 h-6 text-pink-600" />
-                </div>
+                
+                {/* Floating Elements */}
+                {[
+                  { icon: TrendingUp, position: "top-0 right-8", color: "blue", delay: "0s" },
+                  { icon: Award, position: "bottom-0 left-8", color: "purple", delay: "0.5s" },
+                  { icon: Users, position: "top-1/2 left-0", color: "pink", delay: "1s" }
+                ].map((item, index) => (
+                  <div key={index} className={`absolute ${item.position} transform translate-x-4 translate-y-4`} style={{ animationDelay: item.delay }}>
+                    <div className={`bg-gradient-to-r from-${item.color}-500 to-${item.color}-600 p-4 rounded-2xl shadow-2xl animate-bounce backdrop-blur-sm`}>
+                      <item.icon className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <ChevronDown className="w-6 h-6 text-slate-400" />
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <div className="flex flex-col items-center gap-2 animate-bounce">
+            <span className="text-xs text-white/50 font-medium">SCROLL</span>
+            <ChevronDown className="w-5 h-5 text-white/50" />
+          </div>
         </div>
       </section>
 
-      {/* Enhanced About Section */}
-      <section id="about" className="py-20 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 opacity-50"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <span className="text-blue-600 font-semibold text-lg">Get to know me</span>
-            <h2 className="text-5xl font-bold text-slate-800 mb-4 mt-2">About Me</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
+      {/* About Section */}
+      <section id="about" className="py-32 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            <span className="text-blue-400 font-semibold text-lg tracking-wider uppercase">About Me</span>
+            <h2 className="text-6xl font-black text-white mb-6 mt-4">Professional Journey</h2>
+            <div className="w-32 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto rounded-full"></div>
           </div>
           
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-6">
-              <h3 className="text-3xl font-bold text-slate-800 mb-6">Professional Journey</h3>
-              <p className="text-lg text-slate-700 leading-relaxed">
-                As a dedicated BBA graduate, I bring a unique combination of academic excellence and practical experience in financial management, business analysis, and strategic planning. My journey through diverse internships has equipped me with hands-on expertise in financial documentation, market research, and operational efficiency.
-              </p>
-              <p className="text-lg text-slate-700 leading-relaxed">
-                I am passionate about driving business growth, enhancing operational efficiency, and continuously adapting to dynamic business environments. My goal is to leverage my analytical skills and leadership experience to contribute meaningfully to the banking and finance sector.
-              </p>
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            <div className="space-y-8">
+              <div className="space-y-6">
+                <h3 className="text-4xl font-bold text-white">Driven by Excellence</h3>
+                <p className="text-xl text-white/70 leading-relaxed">
+                  As a dedicated BBA graduate, I bring a unique combination of academic excellence and practical experience in financial management, business analysis, and strategic planning.
+                </p>
+                <p className="text-xl text-white/70 leading-relaxed">
+                  My journey through diverse internships has equipped me with hands-on expertise in financial documentation, market research, and operational efficiency optimization.
+                </p>
+              </div>
               
-              {/* Interactive Skills Preview */}
-              <div className="grid grid-cols-2 gap-4 mt-8">
+              <div className="grid grid-cols-2 gap-6">
                 {[
-                  { icon: TrendingUp, title: "Financial Analysis", color: "blue" },
-                  { icon: Users, title: "Team Leadership", color: "green" },
-                  { icon: Target, title: "Strategic Planning", color: "purple" },
-                  { icon: BookOpen, title: "Business Analytics", color: "pink" }
+                  { icon: TrendingUp, title: "Financial Analysis", desc: "Advanced modeling & reporting", color: "blue" },
+                  { icon: Users, title: "Team Leadership", desc: "Proven collaboration skills", color: "purple" },
+                  { icon: Target, title: "Strategic Planning", desc: "Business strategy development", color: "pink" },
+                  { icon: BookOpen, title: "Market Research", desc: "Data-driven insights", color: "orange" }
                 ].map((skill, index) => (
-                  <div key={skill.title} className={`group p-4 bg-${skill.color}-50 rounded-xl hover:bg-${skill.color}-100 transition-all duration-300 cursor-pointer transform hover:scale-105`}>
-                    <skill.icon className={`w-8 h-8 text-${skill.color}-600 mb-2 group-hover:animate-pulse`} />
-                    <h4 className="font-semibold text-slate-800 text-sm">{skill.title}</h4>
+                  <div key={skill.title} className="group p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer">
+                    <div className={`w-12 h-12 bg-gradient-to-r from-${skill.color}-500 to-${skill.color}-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                      <skill.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="font-bold text-white mb-2">{skill.title}</h4>
+                    <p className="text-sm text-white/60">{skill.desc}</p>
                   </div>
                 ))}
               </div>
             </div>
             
-            <div className="space-y-6">
-              <h3 className="text-3xl font-bold text-slate-800 mb-6">Key Achievements</h3>
-              <div className="space-y-4">
-                {[
-                  { icon: Award, title: "Hult Prize Runner-up", desc: "Oxford College of Engineering and Management - OnCampus Event", color: "yellow" },
-                  { icon: Target, title: "Executive Vice President", desc: "Geetanagar Junior Jaycees (2024)", color: "blue" },
-                  { icon: BookOpen, title: "College Ambassador", desc: "Idea Studio Nepal - Kathmandu University", color: "green" },
-                  { icon: CheckCircle, title: "OCEM Sports Tournament", desc: "Quiz Competition - 2nd Runner Up", color: "purple" }
-                ].map((achievement, index) => (
-                  <div key={achievement.title} className="group flex items-start gap-4 p-4 rounded-xl hover:bg-slate-50 transition-all duration-300 cursor-pointer">
-                    <div className={`p-3 bg-${achievement.color}-100 rounded-lg group-hover:scale-110 transition-transform`}>
-                      <achievement.icon className={`w-6 h-6 text-${achievement.color}-600`} />
+            <div className="relative">
+              <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10">
+                <h3 className="text-3xl font-bold text-white mb-8">Core Values</h3>
+                <div className="space-y-6">
+                  {[
+                    { title: "Innovation", desc: "Embracing new technologies and methodologies" },
+                    { title: "Integrity", desc: "Maintaining highest ethical standards" },
+                    { title: "Excellence", desc: "Delivering quality in every project" },
+                    { title: "Growth", desc: "Continuous learning and development" }
+                  ].map((value, index) => (
+                    <div key={value.title} className="flex items-start gap-4">
+                      <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full mt-3 flex-shrink-0"></div>
+                      <div>
+                        <h4 className="font-semibold text-white mb-1">{value.title}</h4>
+                        <p className="text-white/60">{value.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-semibold text-slate-800 group-hover:text-blue-600 transition-colors">{achievement.title}</h4>
-                      <p className="text-slate-600 text-sm">{achievement.desc}</p>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Enhanced Experience Section */}
-      <section id="experience" className="py-20 bg-gradient-to-br from-slate-50 to-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-blue-600 font-semibold text-lg">My Journey</span>
-            <h2 className="text-5xl font-bold text-slate-800 mb-4 mt-2">Professional Experience</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
+      {/* Experience Section */}
+      <section id="experience" className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <span className="text-blue-400 font-semibold text-lg tracking-wider uppercase">Experience</span>
+            <h2 className="text-6xl font-black text-white mb-6 mt-4">Professional Timeline</h2>
+            <div className="w-32 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto rounded-full"></div>
           </div>
 
           <div className="relative">
-            {/* Timeline Line */}
-            <div className="absolute left-1/2 transform -translate-x-px h-full w-0.5 bg-gradient-to-b from-blue-600 to-purple-600"></div>
+            <div className="absolute left-1/2 transform -translate-x-px h-full w-px bg-gradient-to-b from-blue-400 via-purple-500 to-pink-500"></div>
 
-            <div className="space-y-12">
-              {/* Current Role */}
-              <div className="relative flex items-center">
-                <div className="flex-1 pr-8">
-                  <div className="bg-white rounded-2xl shadow-xl p-8 ml-auto max-w-lg transform hover:scale-105 transition-all duration-300 border-l-4 border-blue-600">
-                    <div className="flex justify-between items-start mb-4">
-                      <div>
-                        <h3 className="text-2xl font-bold text-slate-800">Accountant</h3>
-                        <h4 className="text-xl text-blue-600 font-semibold">B.B.R Construction Pvt. Ltd</h4>
-                        <p className="text-slate-600">Bharatpur, Nepal</p>
-                      </div>
-                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">Current</span>
-                    </div>
-                    <div className="mb-4">
-                      <span className="text-sm text-slate-500">2025/02/05 - Present</span>
-                    </div>
-                    <ul className="space-y-2 text-slate-700">
-                      <li className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-blue-600 mt-1 flex-shrink-0" />
-                        <span className="text-sm">Financial record management using Excel and Tally for construction projects</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <CheckCircle className="w-4 h-4 text-blue-600 mt-1 flex-shrink-0" />
-                        <span className="text-sm">Budget compliance monitoring for Gautam Buddha International Cricket Stadium</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-600 rounded-full border-4 border-white shadow-lg"></div>
-                <div className="flex-1 pl-8"></div>
-              </div>
-
-              {/* Previous roles with alternating layout */}
+            <div className="space-y-16">
               {[
+                {
+                  title: "Accountant",
+                  company: "B.B.R Construction Pvt. Ltd",
+                  location: "Bharatpur, Nepal",
+                  period: "2025/02/05 - Present",
+                  current: true,
+                  achievements: [
+                    "Financial record management using Excel and Tally for construction projects",
+                    "Budget compliance monitoring for Gautam Buddha International Cricket Stadium",
+                    "Streamlined financial documentation processes"
+                  ],
+                  side: "right"
+                },
                 {
                   title: "Business Management Intern",
                   company: "Comprehensive Business Management Nepal Pvt. Ltd.",
@@ -346,7 +391,7 @@ const Index = () => {
                     "Market research and business analysis",
                     "Organizational behavior and operational workflows"
                   ],
-                  side: "right"
+                  side: "left"
                 },
                 {
                   title: "Finance Intern",
@@ -358,7 +403,7 @@ const Index = () => {
                     "Economic finance principles application",
                     "Bookkeeping and team collaboration"
                   ],
-                  side: "left"
+                  side: "right"
                 },
                 {
                   title: "Assistant Accountant",
@@ -369,54 +414,74 @@ const Index = () => {
                     "Daily financial transaction management",
                     "Financial data interpretation under supervision"
                   ],
-                  side: "right"
+                  side: "left"
                 }
               ].map((job, index) => (
                 <div key={index} className="relative flex items-center">
                   {job.side === "left" ? (
                     <>
-                      <div className="flex-1 pr-8">
-                        <div className="bg-white rounded-2xl shadow-xl p-8 ml-auto max-w-lg transform hover:scale-105 transition-all duration-300">
-                          <div className="mb-4">
-                            <h3 className="text-2xl font-bold text-slate-800">{job.title}</h3>
-                            <h4 className="text-xl text-blue-600 font-semibold">{job.company}</h4>
-                            <p className="text-slate-600">{job.location}</p>
+                      <div className="flex-1 pr-12">
+                        <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 ml-auto max-w-lg border border-white/10 hover:border-white/20 transition-all duration-300 group">
+                          <div className="flex justify-between items-start mb-6">
+                            <div>
+                              <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">{job.title}</h3>
+                              <h4 className="text-xl text-blue-400 font-semibold mt-1">{job.company}</h4>
+                              <div className="flex items-center gap-2 text-white/60 mt-2">
+                                <MapPin size={14} />
+                                <span>{job.location}</span>
+                              </div>
+                            </div>
+                            {job.current && (
+                              <span className="bg-gradient-to-r from-green-400 to-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                                CURRENT
+                              </span>
+                            )}
                           </div>
-                          <div className="mb-4">
-                            <span className="text-sm text-slate-500">{job.period}</span>
+                          <div className="mb-6">
+                            <span className="text-sm text-white/50">{job.period}</span>
                           </div>
-                          <ul className="space-y-2 text-slate-700">
+                          <ul className="space-y-3">
                             {job.achievements.map((achievement, i) => (
-                              <li key={i} className="flex items-start gap-2">
-                                <CheckCircle className="w-4 h-4 text-blue-600 mt-1 flex-shrink-0" />
-                                <span className="text-sm">{achievement}</span>
+                              <li key={i} className="flex items-start gap-3">
+                                <CheckCircle className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                                <span className="text-white/80">{achievement}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
                       </div>
-                      <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-600 rounded-full border-4 border-white shadow-lg"></div>
-                      <div className="flex-1 pl-8"></div>
+                      <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full border-4 border-black shadow-2xl"></div>
+                      <div className="flex-1 pl-12"></div>
                     </>
                   ) : (
                     <>
-                      <div className="flex-1 pr-8"></div>
-                      <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-purple-600 rounded-full border-4 border-white shadow-lg"></div>
-                      <div className="flex-1 pl-8">
-                        <div className="bg-white rounded-2xl shadow-xl p-8 mr-auto max-w-lg transform hover:scale-105 transition-all duration-300">
-                          <div className="mb-4">
-                            <h3 className="text-2xl font-bold text-slate-800">{job.title}</h3>
-                            <h4 className="text-xl text-blue-600 font-semibold">{job.company}</h4>
-                            <p className="text-slate-600">{job.location}</p>
+                      <div className="flex-1 pr-12"></div>
+                      <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 bg-gradient-to-r from-purple-400 to-pink-500 rounded-full border-4 border-black shadow-2xl"></div>
+                      <div className="flex-1 pl-12">
+                        <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 mr-auto max-w-lg border border-white/10 hover:border-white/20 transition-all duration-300 group">
+                          <div className="flex justify-between items-start mb-6">
+                            <div>
+                              <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">{job.title}</h3>
+                              <h4 className="text-xl text-blue-400 font-semibold mt-1">{job.company}</h4>
+                              <div className="flex items-center gap-2 text-white/60 mt-2">
+                                <MapPin size={14} />
+                                <span>{job.location}</span>
+                              </div>
+                            </div>
+                            {job.current && (
+                              <span className="bg-gradient-to-r from-green-400 to-green-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                                CURRENT
+                              </span>
+                            )}
                           </div>
-                          <div className="mb-4">
-                            <span className="text-sm text-slate-500">{job.period}</span>
+                          <div className="mb-6">
+                            <span className="text-sm text-white/50">{job.period}</span>
                           </div>
-                          <ul className="space-y-2 text-slate-700">
+                          <ul className="space-y-3">
                             {job.achievements.map((achievement, i) => (
-                              <li key={i} className="flex items-start gap-2">
-                                <CheckCircle className="w-4 h-4 text-blue-600 mt-1 flex-shrink-0" />
-                                <span className="text-sm">{achievement}</span>
+                              <li key={i} className="flex items-start gap-3">
+                                <CheckCircle className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
+                                <span className="text-white/80">{achievement}</span>
                               </li>
                             ))}
                           </ul>
@@ -431,113 +496,208 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Interactive Skills Section */}
-      <section id="skills" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-blue-600 font-semibold text-lg">What I Bring</span>
-            <h2 className="text-5xl font-bold text-slate-800 mb-4 mt-2">Core Competencies</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
+      {/* Skills Section */}
+      <section id="skills" className="py-32 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            <span className="text-blue-400 font-semibold text-lg tracking-wider uppercase">Skills</span>
+            <h2 className="text-6xl font-black text-white mb-6 mt-4">Core Competencies</h2>
+            <div className="w-32 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto rounded-full"></div>
           </div>
 
-          {/* Skill Categories */}
-          <div className="grid lg:grid-cols-4 gap-8 mb-16">
-            {[
-              { icon: TrendingUp, title: "Financial Analysis", desc: "Advanced proficiency in financial modeling and reporting", color: "blue", skills: ["Excel", "Tally", "Financial Modeling", "Budget Analysis"] },
-              { icon: Users, title: "Team Leadership", desc: "Proven experience in leading teams and collaboration", color: "green", skills: ["Team Management", "Communication", "Project Coordination", "Conflict Resolution"] },
-              { icon: Target, title: "Strategic Planning", desc: "Expertise in business strategy development", color: "purple", skills: ["Business Strategy", "Market Analysis", "Goal Setting", "Performance Tracking"] },
-              { icon: BookOpen, title: "Business Analytics", desc: "Strong analytical skills with market research knowledge", color: "pink", skills: ["Data Analysis", "Market Research", "Report Writing", "Trend Analysis"] }
-            ].map((category, index) => (
-              <div key={category.title} className="group text-center">
-                <div className={`bg-${category.color}-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 cursor-pointer`}>
-                  <category.icon className={`w-10 h-10 text-${category.color}-600 group-hover:animate-pulse`} />
-                </div>
-                <h3 className="text-2xl font-semibold text-slate-800 mb-3">{category.title}</h3>
-                <p className="text-slate-600 mb-4">{category.desc}</p>
-                <div className="space-y-1">
-                  {category.skills.map((skill, i) => (
-                    <span key={i} className={`inline-block bg-${category.color}-50 text-${category.color}-700 text-xs px-2 py-1 rounded-full mr-1 mb-1`}>
-                      {skill}
-                    </span>
-                  ))}
-                </div>
+          <div className="grid lg:grid-cols-2 gap-16">
+            <div>
+              <h3 className="text-3xl font-bold text-white mb-8">Technical Skills</h3>
+              <div className="space-y-6">
+                {[
+                  { skill: "Financial Analysis", level: 95, color: "from-blue-400 to-blue-600" },
+                  { skill: "MS Excel Advanced", level: 90, color: "from-green-400 to-green-600" },
+                  { skill: "Tally", level: 85, color: "from-purple-400 to-purple-600" },
+                  { skill: "Market Research", level: 88, color: "from-pink-400 to-pink-600" },
+                  { skill: "Report Writing", level: 92, color: "from-orange-400 to-orange-600" },
+                  { skill: "Team Leadership", level: 87, color: "from-teal-400 to-teal-600" }
+                ].map((item, index) => (
+                  <div key={item.skill} className="group">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className="font-semibold text-white group-hover:text-blue-400 transition-colors">{item.skill}</span>
+                      <span className="text-sm text-white/60">{item.level}%</span>
+                    </div>
+                    <div className="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+                      <div 
+                        className={`bg-gradient-to-r ${item.color} h-3 rounded-full transition-all duration-1000 ease-out transform origin-left`}
+                        style={{ width: `${item.level}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
 
-          {/* Skills Progress Bars */}
-          <div className="bg-gradient-to-br from-slate-50 to-blue-50 rounded-3xl p-8">
-            <h3 className="text-3xl font-bold text-slate-800 mb-8 text-center">Technical Proficiency</h3>
-            <div className="grid md:grid-cols-2 gap-8">
-              {[
-                { skill: "Financial Analysis", level: 95, color: "blue" },
-                { skill: "MS Excel Advanced", level: 90, color: "green" },
-                { skill: "Tally", level: 85, color: "purple" },
-                { skill: "Market Research", level: 88, color: "pink" },
-                { skill: "Report Writing", level: 92, color: "indigo" },
-                { skill: "Team Leadership", level: 87, color: "yellow" }
-              ].map((item, index) => (
-                <div key={item.skill} className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="font-semibold text-slate-800">{item.skill}</span>
-                    <span className="text-sm text-slate-600">{item.level}%</span>
+            <div>
+              <h3 className="text-3xl font-bold text-white mb-8">Professional Skills</h3>
+              <div className="grid grid-cols-2 gap-6">
+                {[
+                  { icon: TrendingUp, title: "Financial Planning", desc: "Strategic budgeting & forecasting" },
+                  { icon: Users, title: "Team Management", desc: "Leadership & collaboration" },
+                  { icon: Target, title: "Project Management", desc: "Efficient execution & delivery" },
+                  { icon: BookOpen, title: "Business Analysis", desc: "Data-driven decision making" },
+                  { icon: Award, title: "Quality Assurance", desc: "Attention to detail & accuracy" },
+                  { icon: Briefcase, title: "Client Relations", desc: "Professional communication" }
+                ].map((skill, index) => (
+                  <div key={skill.title} className="group bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm p-6 rounded-2xl border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer">
+                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                      <skill.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">{skill.title}</h4>
+                    <p className="text-sm text-white/60">{skill.desc}</p>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-3">
-                    <div 
-                      className={`bg-gradient-to-r from-${item.color}-400 to-${item.color}-600 h-3 rounded-full transition-all duration-1000 ease-out`}
-                      style={{ width: `${item.level}%` }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Education Section */}
+      <section id="education" className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <span className="text-blue-400 font-semibold text-lg tracking-wider uppercase">Education</span>
+            <h2 className="text-6xl font-black text-white mb-6 mt-4">Academic Excellence</h2>
+            <div className="w-32 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto rounded-full"></div>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-12 border border-white/10">
+              <div className="flex items-center gap-6 mb-8">
+                <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center">
+                  <GraduationCap className="w-10 h-10 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-3xl font-bold text-white">Bachelor of Business Administration (BBA)</h3>
+                  <p className="text-xl text-blue-400 font-semibold">Oxford College of Engineering and Management</p>
+                  <p className="text-white/60">Affiliated to Kathmandu University</p>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h4 className="text-xl font-semibold text-white mb-4">Specializations</h4>
+                  <ul className="space-y-2">
+                    {[
+                      "Financial Management",
+                      "Banking & Finance",
+                      "Business Strategy",
+                      "Market Analysis",
+                      "Organizational Behavior"
+                    ].map((spec, index) => (
+                      <li key={spec} className="flex items-center gap-3">
+                        <CheckCircle className="w-4 h-4 text-blue-400" />
+                        <span className="text-white/80">{spec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h4 className="text-xl font-semibold text-white mb-4">Key Coursework</h4>
+                  <ul className="space-y-2">
+                    {[
+                      "Financial Accounting",
+                      "Business Analytics",
+                      "Corporate Finance",
+                      "Marketing Management",
+                      "Operations Management"
+                    ].map((course, index) => (
+                      <li key={course} className="flex items-center gap-3">
+                        <CheckCircle className="w-4 h-4 text-purple-400" />
+                        <span className="text-white/80">{course}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Achievements Section */}
+      <section id="achievements" className="py-32 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            <span className="text-blue-400 font-semibold text-lg tracking-wider uppercase">Achievements</span>
+            <h2 className="text-6xl font-black text-white mb-6 mt-4">Recognition & Awards</h2>
+            <div className="w-32 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto rounded-full"></div>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {achievements.map((achievement, index) => (
+              <div key={index} className="group bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer">
+                <div className="flex items-start gap-6">
+                  <div className={`w-16 h-16 bg-gradient-to-r ${achievement.color} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                    <achievement.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex justify-between items-start mb-4">
+                      <h3 className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">{achievement.title}</h3>
+                      <span className="text-sm font-semibold text-white/60 bg-white/10 px-3 py-1 rounded-full">{achievement.year}</span>
+                    </div>
+                    <p className="text-white/70 leading-relaxed">{achievement.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Blog Section */}
-      <section id="blog" className="py-20 bg-gradient-to-br from-slate-50 to-purple-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-blue-600 font-semibold text-lg">Insights & Thoughts</span>
-            <h2 className="text-5xl font-bold text-slate-800 mb-4 mt-2">Latest Blog Posts</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
-            <p className="text-xl text-slate-600 mt-6 max-w-3xl mx-auto">
-              Sharing insights on finance, leadership, and business strategy from my professional journey
+      <section id="blog" className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <span className="text-blue-400 font-semibold text-lg tracking-wider uppercase">Blog</span>
+            <h2 className="text-6xl font-black text-white mb-6 mt-4">Latest Insights</h2>
+            <div className="w-32 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto rounded-full"></div>
+            <p className="text-xl text-white/60 mt-8 max-w-3xl mx-auto">
+              Sharing thoughts on finance, leadership, and business strategy
             </p>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
             {blogPosts.map((post, index) => (
-              <article key={index} className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+              <article key={index} className="group bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer">
                 <div className="relative overflow-hidden">
                   <img 
                     src={post.image} 
                     alt={post.title}
-                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                   <div className="absolute top-4 left-4">
-                    <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                    <span className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
                       {post.category}
                     </span>
                   </div>
                 </div>
                 <div className="p-6">
-                  <div className="flex items-center gap-4 text-sm text-slate-500 mb-3">
-                    <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-4 text-sm text-white/50 mb-4">
+                    <div className="flex items-center gap-2">
                       <Calendar size={14} />
                       <span>{post.date}</span>
                     </div>
                     <span>•</span>
                     <span>{post.readTime}</span>
                   </div>
-                  <h3 className="text-xl font-bold text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
                     {post.title}
                   </h3>
-                  <p className="text-slate-600 mb-4 leading-relaxed">
+                  <p className="text-white/60 mb-6 leading-relaxed">
                     {post.excerpt}
                   </p>
-                  <button className="flex items-center gap-2 text-blue-600 font-semibold hover:gap-3 transition-all duration-300">
+                  <button className="flex items-center gap-2 text-blue-400 font-semibold hover:gap-3 transition-all duration-300">
                     Read More
                     <ArrowRight size={16} />
                   </button>
@@ -546,8 +706,8 @@ const Index = () => {
             ))}
           </div>
 
-          <div className="text-center mt-12">
-            <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+          <div className="text-center mt-16">
+            <button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-2xl font-semibold">
               View All Posts
             </button>
           </div>
@@ -555,31 +715,39 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="text-blue-600 font-semibold text-lg">What Others Say</span>
-            <h2 className="text-5xl font-bold text-slate-800 mb-4 mt-2">Testimonials</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto rounded-full"></div>
+      <section id="testimonials" className="py-32 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent"></div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            <span className="text-blue-400 font-semibold text-lg tracking-wider uppercase">Testimonials</span>
+            <h2 className="text-6xl font-black text-white mb-6 mt-4">What Others Say</h2>
+            <div className="w-32 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto rounded-full"></div>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="group bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+              <div key={index} className="group bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer">
                 <div className="flex items-center gap-1 mb-6">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
-                <div className="relative mb-6">
-                  <Quote className="absolute -top-2 -left-2 w-8 h-8 text-blue-200" />
-                  <p className="text-slate-700 leading-relaxed italic pl-6">
+                <div className="relative mb-8">
+                  <Quote className="absolute -top-2 -left-2 w-8 h-8 text-blue-400/30" />
+                  <p className="text-white/80 leading-relaxed italic pl-6">
                     "{testimonial.content}"
                   </p>
                 </div>
-                <div className="border-t border-slate-200 pt-4">
-                  <h4 className="font-semibold text-slate-800">{testimonial.name}</h4>
-                  <p className="text-sm text-slate-600">{testimonial.position}</p>
+                <div className="flex items-center gap-4 pt-6 border-t border-white/10">
+                  <img 
+                    src={testimonial.avatar} 
+                    alt={testimonial.name}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div>
+                    <h4 className="font-semibold text-white group-hover:text-blue-400 transition-colors">{testimonial.name}</h4>
+                    <p className="text-sm text-white/60">{testimonial.position}</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -587,69 +755,64 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Enhanced Contact Section */}
-      <section id="contact" className="py-20 bg-gradient-to-br from-slate-800 via-blue-900 to-purple-900 text-white relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-white rounded-full"></div>
-          <div className="absolute bottom-20 right-20 w-24 h-24 bg-white rounded-full"></div>
-          <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-white rounded-full"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <span className="text-blue-300 font-semibold text-lg">Ready to Collaborate</span>
-            <h2 className="text-5xl font-bold mb-4 mt-2">Let's Connect</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto rounded-full"></div>
-            <p className="text-xl text-slate-300 mt-6">Ready to contribute to your organization's success</p>
+      {/* Contact Section */}
+      <section id="contact" className="py-32 relative">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <span className="text-blue-400 font-semibold text-lg tracking-wider uppercase">Contact</span>
+            <h2 className="text-6xl font-black text-white mb-6 mt-4">Let's Connect</h2>
+            <div className="w-32 h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto rounded-full"></div>
+            <p className="text-xl text-white/60 mt-8">Ready to contribute to your organization's success</p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid lg:grid-cols-2 gap-16">
             <div>
-              <h3 className="text-3xl font-semibold mb-6">Get In Touch</h3>
-              <p className="text-lg text-slate-300 mb-8 leading-relaxed">
-                I'm actively seeking opportunities in finance, banking, and management roles where I can apply my skills and contribute to organizational growth. Let's discuss how I can add value to your team.
+              <h3 className="text-4xl font-semibold text-white mb-8">Get In Touch</h3>
+              <p className="text-xl text-white/70 mb-12 leading-relaxed">
+                I'm actively seeking opportunities in finance, banking, and management roles where I can apply my skills and contribute to organizational growth.
               </p>
               
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {[
-                  { icon: Phone, label: "Phone", value: "+977 9867746750", color: "blue" },
-                  { icon: Mail, label: "Email", value: "sudipasubedi2024@gmail.com", color: "green" },
-                  { icon: Linkedin, label: "LinkedIn", value: "linkedin.com/in/sudipa subedi", color: "purple" },
-                  { icon: Globe, label: "Website", value: "sudipasubedi.com.np", color: "pink" }
+                  { icon: Phone, label: "Phone", value: "+977 9867746750", color: "from-blue-400 to-blue-600" },
+                  { icon: Mail, label: "Email", value: "sudipasubedi2024@gmail.com", color: "from-green-400 to-green-600" },
+                  { icon: Linkedin, label: "LinkedIn", value: "linkedin.com/in/sudipa-subedi", color: "from-purple-400 to-purple-600" },
+                  { icon: Globe, label: "Website", value: "sudipasubedi.com.np", color: "from-pink-400 to-pink-600" }
                 ].map((contact, index) => (
-                  <div key={contact.label} className="group flex items-center gap-4 p-4 rounded-xl hover:bg-white/10 transition-all duration-300 cursor-pointer">
-                    <div className={`bg-${contact.color}-600 p-3 rounded-lg group-hover:scale-110 transition-transform`}>
-                      <contact.icon className="w-6 h-6" />
+                  <div key={contact.label} className="group flex items-center gap-6 p-6 rounded-2xl hover:bg-white/5 transition-all duration-300 cursor-pointer">
+                    <div className={`bg-gradient-to-r ${contact.color} p-4 rounded-xl group-hover:scale-110 transition-transform`}>
+                      <contact.icon className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <p className="text-slate-300 text-sm">{contact.label}</p>
-                      <p className="text-xl font-medium">{contact.value}</p>
+                      <p className="text-white/50 text-sm mb-1">{contact.label}</p>
+                      <p className="text-xl font-medium text-white group-hover:text-blue-400 transition-colors">{contact.value}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl">
-              <h3 className="text-3xl font-semibold mb-6">Professional Interests</h3>
-              <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm p-12 rounded-3xl border border-white/10">
+              <h3 className="text-3xl font-semibold text-white mb-8">Professional Interests</h3>
+              <div className="grid grid-cols-2 gap-6 mb-12">
                 {[
-                  { icon: TrendingUp, title: "Banking & Finance", color: "blue" },
-                  { icon: Users, title: "Management", color: "green" },
-                  { icon: Target, title: "Business Analysis", color: "purple" },
-                  { icon: BookOpen, title: "Strategic Planning", color: "yellow" }
+                  { icon: TrendingUp, title: "Banking & Finance", color: "from-blue-400 to-blue-600" },
+                  { icon: Users, title: "Management", color: "from-green-400 to-green-600" },
+                  { icon: Target, title: "Business Analysis", color: "from-purple-400 to-purple-600" },
+                  { icon: BookOpen, title: "Strategic Planning", color: "from-orange-400 to-orange-600" }
                 ].map((interest, index) => (
-                  <div key={interest.title} className="bg-white/10 p-4 rounded-xl text-center hover:bg-white/20 transition-colors cursor-pointer group">
-                    <interest.icon className={`w-8 h-8 mx-auto mb-2 text-${interest.color}-400 group-hover:animate-pulse`} />
-                    <h4 className="font-semibold text-sm">{interest.title}</h4>
+                  <div key={interest.title} className="bg-white/5 p-6 rounded-2xl text-center hover:bg-white/10 transition-colors cursor-pointer group">
+                    <div className={`w-12 h-12 bg-gradient-to-r ${interest.color} rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform`}>
+                      <interest.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h4 className="font-semibold text-white text-sm">{interest.title}</h4>
                   </div>
                 ))}
               </div>
               
-              <div className="text-center space-y-4">
-                <p className="text-slate-300">Available for immediate opportunities</p>
-                <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg flex items-center justify-center gap-2">
+              <div className="text-center space-y-6">
+                <p className="text-white/60">Available for immediate opportunities</p>
+                <button className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-2xl hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center gap-3 font-semibold">
                   <Download size={20} />
                   Download Resume
                 </button>
@@ -659,32 +822,35 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Enhanced Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
+      {/* Footer */}
+      <footer className="bg-black/50 backdrop-blur-sm border-t border-white/10 py-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div>
-              <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
+              <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-6">
                 SUDIPA SUBEDI
               </div>
-              <p className="text-sm">
+              <p className="text-white/60 leading-relaxed">
                 BBA Graduate passionate about finance, management, and driving organizational success through strategic insights.
               </p>
             </div>
             
             <div>
-              <h4 className="font-semibold text-white mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#about" className="hover:text-blue-400 transition-colors">About</a></li>
-                <li><a href="#experience" className="hover:text-blue-400 transition-colors">Experience</a></li>
-                <li><a href="#skills" className="hover:text-blue-400 transition-colors">Skills</a></li>
-                <li><a href="#blog" className="hover:text-blue-400 transition-colors">Blog</a></li>
+              <h4 className="font-semibold text-white mb-6">Quick Links</h4>
+              <ul className="space-y-3 text-sm">
+                {['About', 'Experience', 'Skills', 'Education', 'Blog'].map((item) => (
+                  <li key={item}>
+                    <a href={`#${item.toLowerCase()}`} className="text-white/60 hover:text-blue-400 transition-colors">
+                      {item}
+                    </a>
+                  </li>
+                ))}
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold text-white mb-4">Services</h4>
-              <ul className="space-y-2 text-sm">
+              <h4 className="font-semibold text-white mb-6">Services</h4>
+              <ul className="space-y-3 text-sm text-white/60">
                 <li>Financial Analysis</li>
                 <li>Business Strategy</li>
                 <li>Market Research</li>
@@ -693,24 +859,24 @@ const Index = () => {
             </div>
             
             <div>
-              <h4 className="font-semibold text-white mb-4">Connect</h4>
+              <h4 className="font-semibold text-white mb-6">Connect</h4>
               <div className="flex space-x-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors cursor-pointer">
-                  <Linkedin size={16} />
-                </div>
-                <div className="w-8 h-8 bg-slate-600 rounded-full flex items-center justify-center hover:bg-slate-700 transition-colors cursor-pointer">
-                  <Mail size={16} />
-                </div>
-                <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center hover:bg-purple-700 transition-colors cursor-pointer">
-                  <Globe size={16} />
-                </div>
+                {[
+                  { icon: Linkedin, color: "from-blue-500 to-blue-600" },
+                  { icon: Mail, color: "from-green-500 to-green-600" },
+                  { icon: Globe, color: "from-purple-500 to-purple-600" }
+                ].map((social, index) => (
+                  <div key={index} className={`w-10 h-10 bg-gradient-to-r ${social.color} rounded-lg flex items-center justify-center hover:scale-110 transition-transform cursor-pointer`}>
+                    <social.icon size={18} className="text-white" />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
           
-          <div className="border-t border-slate-700 pt-8 text-center">
-            <p>&copy; 2024 Sudipa Subedi. All rights reserved.</p>
-            <p className="mt-2 text-sm">Designed for professional excellence in finance and management</p>
+          <div className="border-t border-white/10 pt-8 text-center">
+            <p className="text-white/60">&copy; 2024 Sudipa Subedi. All rights reserved.</p>
+            <p className="mt-2 text-sm text-white/40">Designed for professional excellence in finance and management</p>
           </div>
         </div>
       </footer>
